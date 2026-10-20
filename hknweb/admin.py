@@ -15,6 +15,7 @@ from hknweb.models import (
     Election,
     Committeeship,
     DriveFolderID,
+    ShortLink,
 )
 from hknweb.forms import ProvisionCandidatesForm
 
@@ -125,6 +126,7 @@ class CustomUserAdmin(UserAdmin):
         return render(request, "admin/provision_candidate_accounts.html", context)
 
 
+@admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
     # NOTE: release_date is not readonly because we can reuse announcements from past semesters
     # The VP can just change the date and release it again
@@ -151,7 +153,17 @@ class CommitteeshipAdmin(admin.ModelAdmin):
     autocomplete_fields = ["officers", "assistant_officers", "committee_members"]
 
 
-admin.site.register(Announcement, AnnouncementAdmin)
+@admin.register(ShortLink)
+class ShortLinkAdmin(admin.ModelAdmin):
+    fields = ["title", "url", "creator", "created_at", "updated_at", "active"]
+    list_display = ("title", "creator", "active")
+    readonly_fields = ("created_at", "updated_at")
+    list_filter = ["active", "creator", "created_at", "updated_at"]
+    search_fields = ["title", "creator"]
+
+
+
+
 admin.site.register(Profile)
 admin.site.register(CandidateProvisioningPassword)
 admin.site.register(Committee)

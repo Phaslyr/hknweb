@@ -142,3 +142,17 @@ class DriveFolderID(models.Model):
 
     def __str__(self) -> str:  # pragma: no cover
         return self.title
+
+
+class ShortLink(models.Model):
+    title = models.CharField(max_length=200, blank=False)
+    url = models.URLField(max_length=500, blank=False)
+    creator = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
+
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+
+    active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
